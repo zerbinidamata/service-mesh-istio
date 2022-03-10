@@ -1,0 +1,9 @@
+{
+  "scripts": {
+    "start": "node products.js"
+  },
+  "dependencies": {
+    "httpdispatcher": "^2.2.0",
+    "postgres": "^1.0.2"
+  }
+}
