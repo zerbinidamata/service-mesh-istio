@@ -1,7 +1,7 @@
-FROM node:latest-slim
+FROM node:17-alpine
 
 ENV APP_HOME /app
-ARG PORT=8080
+ARG PORT=8000
 ENV PORT=${PORT}
 
 COPY * $APP_HOME

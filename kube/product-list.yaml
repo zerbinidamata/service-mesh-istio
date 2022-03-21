@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: list
+  labels:
+    app: list
+    service: list
+spec:
+  ports:
+  - port: 8000
+    name: http
+  selector:
+    app: list
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: list-v1
+  labels:
+    app: list
+    version: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: list
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: list
+        version: v1
+    spec:
+      containers:
+      - name: list
+        image: #TODO: add image
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8000
+        securityContext:
+          runAsUser: 1000
+---

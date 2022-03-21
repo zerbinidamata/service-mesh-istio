@@ -1,4 +1,4 @@
-FROM ruby:latest-slim
+FROM ruby:3.0.0-alpine
 
 ENV APP_HOME=/app
 ARG PORT=3000
