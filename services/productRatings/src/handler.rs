@@ -4,17 +4,18 @@ use warp::{http::StatusCode, reject, reply::json, Reply};
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct RatingRequest {
-    pub user_id: Integer,
-    pub rating: Integer,
+    pub author_id: String,
+    pub rating: String,
+    pub product_id: String
 }
 
 pub async fn ratings_list_handler(db: DB) -> WebResult<impl Reply> {
-    let ratings = db.fetch_ratings().await.map_err(|e| reject::custom(e))?;
+    let ratings = db.fetch_ratings(" a").await.map_err(|e| reject::custom(e))?;
     Ok(json(&ratings))
 }
 
 pub async fn create_rating_handler(body: RatingRequest, db: DB) -> WebResult<impl Reply> {
-    db.create_rating(&body).await.map_err(|e| reject::custom(e))?;
+    db.create_rating(body).await.map_err(|e| reject::custom(e))?;
     Ok(StatusCode::CREATED)
 }
 
