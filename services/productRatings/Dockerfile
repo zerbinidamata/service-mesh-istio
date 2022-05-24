@@ -1,38 +1,11 @@
-FROM rust:latest as builder
+FROM ruby:3.0.0-alpine
 
-RUN USER=root cargo new --bin productRatings
-WORKDIR ./productRatings
-COPY ./Cargo.toml ./Cargo.toml
-RUN cargo build --release
-RUN rm src/*.rs
+ENV APP_HOME=/app
+WORKDIR $APP_HOME
 
-ADD . ./
+ARG PORT=3000
+ENV PORT=${PORT}
 
-RUN rm ./target/release/deps/productRatings*
-RUN cargo build --release
+COPY * $APP_HOME
 
-
-FROM debian:buster-slim
-ARG APP=/usr/src/app
-
-RUN apt-get update \
-    && apt-get install -y ca-certificates tzdata \
-    && rm -rf /var/lib/apt/lists/*
-
-EXPOSE 8000
-
-ENV TZ=Etc/UTC \
-    APP_USER=appuser
-
-RUN groupadd $APP_USER \
-    && useradd -g $APP_USER $APP_USER \
-    && mkdir -p ${APP}
-
-COPY --from=builder /productRatings/target/release/productRatings ${APP}/productRatings
-
-RUN chown -R $APP_USER:$APP_USER ${APP}
-
-USER $APP_USER
-WORKDIR ${APP}
-
-CMD ["./productRatings"]
+CMD ["ruby", "ratings.rb"]
